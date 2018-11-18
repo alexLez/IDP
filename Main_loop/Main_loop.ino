@@ -2,15 +2,22 @@
 #include "Coordinate_find.h"
 #include "Motor_functions.h"
 #include "Magnometer.h"
+#include "LED.h"
 #include <math.h>
 //define a variable for the current time and time since starting
 unsigned long start_time;
 unsigned long current_time;
+//define LED pins here
+const int LED_RED_PIN= 6;
+const int LED_YELLOW_PIN=7;
+
 
 //set the length in y direction of arena
 float y_length;
 
-
+//define a variable to store the positions of red mines and the number collected
+int red_mines[100][2];
+int number_of_red_mines_collected;
 //define the original direction and the current direction
 float original_angle_compass;
 float current_angle;
@@ -86,7 +93,7 @@ void loop() {
               coordinate[0]=y;
               coordinate[1]=y_length-x;
         }
-        //colour = update the colour with what is detected by the ultrasound
+        //colour = update the colour with what is detected by the LDR
         //update the angle we must turn towards if it is a yellow mine
         if (colour ==0 and current_time<450){    //there is black space in front
           //keep the desired angle the same so essentially pass
@@ -98,15 +105,22 @@ void loop() {
           //set desired angle = to current desired angle +x degrees
         }
           else if(colour==2 and current_time<450){
+          //stop robot
           stop_robot();
           //record position
           //flash yellow LED
+          LED(colour);
           //set desired angle = to current desired angle +LDR Angle degrees
         }
         else if(colour==3 and current_time<450){
           stop_robot();
-          //record position
+          //record position and store it
+          red_mines[number_of_red_mines_collected][0]=coordinate[0];
+          red_mines[number_of_red_mines_collected][1]=coordinate[1];
+          number_of_red_mines_collected+=1;
           //flash red LED
+          LED(colour);
+          //turn an angle
           turn(current_angle,135);   //change this angle to whatever the algorithm needs
           //set desired angle = to current desired angle +LDR Angle degrees
         }
