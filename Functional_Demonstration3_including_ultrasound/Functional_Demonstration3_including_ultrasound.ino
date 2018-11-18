@@ -2,10 +2,7 @@
 #include "Coordinate_find.h"
 #include "Motor_functions.h"
 #include "Magnometer.h"
-#include <math.h>
-//define a variable for the current time and time since starting
-unsigned long start_time;
-unsigned long current_time;
+// define functions
 
 //set the length in y direction of arena
 float y_length;
@@ -15,18 +12,8 @@ float y_length;
 float original_angle_compass;
 float current_angle;
 
-//find way home variables
-float alpha;
-float beta;
-float theta;
-
 //define angle to follow
 float angle_to_follow;
-
-//define a variable to store the colour infront - this will be 0 for black, 1 for white, 2 for yellow, 3 for red
-int colour;
-//define a variable to store the angle we should turn towards the correct LDR
-float LDR_angle;
 
 void setup() {
         //set up motors
@@ -59,7 +46,8 @@ void setup() {
 
         //define angle to follow as directly straight forward
         angle_to_follow = 0;
-        start_time = millis();
+
+        Serial.begin(9600);
 }
 
 
@@ -69,7 +57,7 @@ void setup() {
 
 void loop() {
         //get data
-        current_time = (millis()-start_time)/1000;
+          
         //find current angle here using magnometer and the difference from the 0 point
         current_angle = compass()-original_angle_compass;
         if (current_angle<180){
@@ -86,38 +74,17 @@ void loop() {
               coordinate[0]=y;
               coordinate[1]=y_length-x;
         }
+        //print coordinate location after the turn
+        Serial.println("("); Serial.println(coordinate[0]); Serial.println(coordinate[1]); Serial.println(")");
+        //drive round in a square
+        angle_to_follow = current_angle;
         //colour = update the colour with what is detected by the ultrasound
         //update the angle we must turn towards if it is a yellow mine
-        if (colour ==0 and current_time<450){    //there is black space in front
-          //keep the desired angle the same so essentially pass
-        }
-        else if(colour==1 and current_time<450){  //white
-          stop_robot();
-          //drive forward out of the box, and then reverse back to drop off any yellow mines
-          turn(current_angle,135);   //change this angle to whatever the algorithm needs
-          //set desired angle = to current desired angle +x degrees
-        }
-          else if(colour==2 and current_time<450){
-          stop_robot();
-          //record position
-          //flash yellow LED
-          //set desired angle = to current desired angle +LDR Angle degrees
-        }
-        else if(colour==3 and current_time<450){
-          stop_robot();
-          //record position
-          //flash red LED
-          turn(current_angle,135);   //change this angle to whatever the algorithm needs
-          //set desired angle = to current desired angle +LDR Angle degrees
-        }
-        else{   //if we are over 7.5 minutes we need to go home
-            alpha = current_angle;
-            theta = atan(coordinate[0]/coordinate[1]);
-            beta = 180-alpha+theta;
-            angle_to_follow = beta;
-        }
-        motor_follow_angle(current_angle, angle_to_follow);
-          
+       
+        motor_follow_angle(current_angle, angle_to_follow); 
+        delay(5000);         
+        current_angle = compass()-original_angle_compass;
+        turn(current_angle, 90);
         
         
         
