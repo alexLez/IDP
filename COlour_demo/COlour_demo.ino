@@ -55,10 +55,10 @@ void setup() {
 
 void loop() {
         //get data
-        
-        if (colour ==0){
         current_angle = compass();
         current_angle=relative_angle(original_angle_compass,current_angle);//make it relative to original angle
+        //find the current colour
+        if (colour ==0){
         motor_follow_angle(current_angle, 0); 
         }
         if (colour==2){
