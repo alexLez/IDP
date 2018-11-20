@@ -32,9 +32,9 @@ int light_levels(int pin){    //return an integer representing the colour that i
 
 float array_average(float array1[10]){
   float total = 0;
-  for (int i=0;i<10;i+=1){
+  for (int i=0;i<8;i+=1){
     total+=array1[i];
   }
-  float average = total/10;
+  float average = total/8;
   return average;
 }

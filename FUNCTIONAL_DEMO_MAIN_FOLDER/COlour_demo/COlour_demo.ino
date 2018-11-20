@@ -75,10 +75,28 @@ void loop() {
           rolling_colour[i]=rolling_colour[i+1];
         }
         rolling_colour[9] = light_levels(Pin1);
-        rolling_average = array_average(rolling_colour);
+        rolling_average = array_average(rolling_colour);//this is the rolling average of the first 8 values so we can sompare the ifnal 2 values to check if there is a new colour detected
+        BlackRef = rolling_average;
         if (((rolling_colour[9]+rolling_colour[8])/2)>rolling_average+50){    //the 50 is just the minimum that may be a mine as it is a significant jump
-          
-          
+             MotorLeft->setSpeed(30);
+             MotorLeft->run(FORWARD); 
+             MotorRight->setSpeed(30);
+             MotorRight->run(FORWARD);
+             delay(1000); //delay one second until we are closer in
+             stop_robot();
+             delay(100); 
+             float light_levels_used=light_levels(Pin1);
+             if (light_levels_used>BlackRef+100 and light_levels_used<BlackRef+200){    //this is only for yellow and red at the moment
+              colour = 2 ;
+             }
+             if (light_levels_used>=BlackRef+200 and light_levels_used>BlackRef+1000){
+              colour = 3;
+             }
+             else {
+              colour=0;
+             }
+              
+             
         }
 
         
