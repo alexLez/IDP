@@ -1,5 +1,6 @@
 
-void xycoordinate() {     //coordinate finding function
+void xycoordinate() 
+{     //coordinate finding function
         //get the x coordinate
         // defines ultrasound variables
         long xduration;

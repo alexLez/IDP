@@ -16,7 +16,12 @@ const int LED_YELLOW_PIN=7;
 float original_angle_compass;
 float current_angle;
 
-
+//define the colour function stuff
+int colour;
+int Pin1=A0;
+int BlackRef;
+float rolling_colour[10]={0,0,0,0,0,0,0,0,0,0};  //create a colour array full of zeros
+float rolling_average;
 //define angle to follow
 float angle_to_follow;
 
@@ -45,6 +50,13 @@ void setup() {
         AFMS.begin();  // create with the default frequency 1.6KHz for motors
         pinMode(LED_RED_PIN, OUTPUT);
         pinMode(LED_YELLOW_PIN, OUTPUT);
+        
+        
+       //fill the colour array with the value of black detected at the start in 0.01 sec time intervals
+        for (int i=0;i<10;i+=1){
+          rolling_colour[i]=light_levels(Pin1);
+          delay(10);
+        }
 }
 
 
@@ -57,7 +69,19 @@ void loop() {
         //get data
         current_angle = compass();
         current_angle=relative_angle(original_angle_compass,current_angle);//make it relative to original angle
+        
         //find the current colour
+        for (int i=0;i<9;i+=1){    //all the avlues in array down by one - the most recent level is put at the end
+          rolling_colour[i]=rolling_colour[i+1];
+        }
+        rolling_colour[9] = light_levels(Pin1);
+        rolling_average = array_average(rolling_colour);
+        if (((rolling_colour[9]+rolling_colour[8])/2)>rolling_average+50){    //the 50 is just the minimum that may be a mine as it is a significant jump
+          
+          
+        }
+
+        
         if (colour ==0){
         motor_follow_angle(current_angle, 0); 
         }
@@ -70,7 +94,7 @@ void loop() {
           stop_robot();
           LED(3);
           delay(10000);
-        
+        }
      
           
         
@@ -80,4 +104,5 @@ void loop() {
         
         
   
+
 }
