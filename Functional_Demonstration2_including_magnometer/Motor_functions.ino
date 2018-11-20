@@ -8,17 +8,38 @@ void motor_follow_angle(float current_angle,float desired_angle){
          Serial.println("desired angle is:");
          Serial.println(desired_angle);
          int M_average = 100;
-         int k_p=M_average/90;   //it should be full power when 90 degrees out and then decrease to half power when close to correct angle
+         int k_p_large=5; //for when it is out by more than 5
+         int k_p_small=5;  //for when it is only a small deviation
          float e = current_angle-desired_angle; //if this is positive we are veering to the right
          Serial.println("error is");
          Serial.println(e);
-         int p_out = k_p*e;  //set gain
+         if (-5 <e and e<5){
+         p_out = k_p_small*e;
+         }
+         else{
+         p_out = k_p_large*e;  //set gain
+         }
          int right_motor_out = M_average +p_out;
          int left_motor_out = M_average -p_out;
+         if (right_motor_out>255){
+            right_motor_out=255;
+         }
+         if (left_motor_out>255){
+            left_motor_out=255;
+         }
+         if (right_motor_out<0){
+            right_motor_out=0;
+         }
+         if (left_motor_out<0){
+            left_motor_out=0;
+         }
          MotorLeft->setSpeed(left_motor_out);
          MotorLeft->run(FORWARD); 
          MotorRight->setSpeed(right_motor_out);
          MotorRight->run(FORWARD); 
+         Serial.println(left_motor_out);
+         Serial.println(right_motor_out);
+         
          
          
 }
@@ -26,11 +47,12 @@ void motor_follow_angle(float current_angle,float desired_angle){
 
 //turn x degrees
 void turn(int current_angle, int turn_angle){
-    float target_angle = current_angle+turn_angle;
-    while (abs(target_angle-compass())>5);
+    int direction_turn = turn_angle/abs(turn_angle);
+    float target_angle = current_angle+turn_angle;    //positive is clockwise and negative is AC
+    while (direction_turn*(target_angle-compass())>5);
          {
                  int M_average = 100;
-                 int k_p = 150/90;
+                 int k_p = 10;
                  float e = target_angle-current_angle;
                  int p_out = e*k_p;
                  int direction_turn = e/abs(e);

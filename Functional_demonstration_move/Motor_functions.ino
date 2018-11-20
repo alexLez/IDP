@@ -1,16 +1,19 @@
 
+
+  
     
 void motor_follow_angle(float current_angle,float desired_angle){
-         Serial.println("current_angle is:");
-         Serial.println(current_angle);
-         Serial.println("desired angle is:");
-         Serial.println(desired_angle);
+         
          int M_average = 100;
          int k_p_large=5; //for when it is out by more than 5
          int k_p_small=5;  //for when it is only a small deviation
-         float e = current_angle-desired_angle; //if this is positive we are veering to the right
-         Serial.println("error is");
-         Serial.println(e);
+         float e = current_angle-desired_angle; //if this is positive we are veering to the right so increase right motor
+         if (e<-180){      //this normalises the angle difference as we have a angle 'clock' that goes -180 to 180
+          e+=360;
+         }
+         if (e>180){
+          e-=360;
+         }
          if (-5 <e and e<5){
          p_out = k_p_small*e;
          }
@@ -35,8 +38,6 @@ void motor_follow_angle(float current_angle,float desired_angle){
          MotorLeft->run(FORWARD); 
          MotorRight->setSpeed(right_motor_out);
          MotorRight->run(FORWARD); 
-         Serial.println(left_motor_out);
-         Serial.println(right_motor_out);
          
          
          
@@ -47,50 +48,48 @@ void motor_follow_angle(float current_angle,float desired_angle){
 void turn(int current_angle, int turn_angle){
     int direction_turn = turn_angle/abs(turn_angle);  //positive is clockwise and negative is AC 
     float target_angle = current_angle+turn_angle;
-    float e =(target_angle-relative_angle(original_angle_compass,compass()));
-      
-      Serial.print("Error");
-      Serial.println(e);
-      
-    while ((e)>5)   //while we are over 5 degrees from the angle we want to be at use the proportional control to get there
-         {      
-                 int M_average = 100;
-                 int k_p = 5;
-                 
-                 Serial.println(e); 
-                 int p_out = e*k_p;
+    if (target_angle<-180){      //this normalises the angle difference as we have a angle 'clock' that goes -180 to 180
+          target_angle+=360;
+    }
+    if (target_angle>180){
+        target_angle-=360;
+    }
+    float e=current_angle-target_angle;
+    if (e<-180){      //this normalises the angle difference as we have a angle 'clock' that goes -180 to 180
+          e+=360;
+    }
+    if (e>180){
+        e-=360;
+    }
+    int M_average = 100;
+    int k_p = 10;
+    while (-direction_turn*(e)>5){   //while we are over 5 degrees from the angle we want to be at use the proportional control to get there
+               
+                 int p_out = abs(e*k_p); //absolute as we don't want either to slow down from M_average so they only get faster as e increase - sign does not matter
                  int direction_turn = e/abs(e);
                  int left_motor_out = (M_average +p_out);
                  int right_motor_out = (M_average +p_out);
-                 if (right_motor_out>255){
-                    right_motor_out=255;
-                 }
-                 if (left_motor_out>255){
-                    left_motor_out=255;
-         }
                  if (direction_turn==1){
                  MotorLeft->setSpeed(left_motor_out);
                  MotorLeft->run(FORWARD); 
                  MotorRight->setSpeed(right_motor_out);
                  MotorRight->run(BACKWARD);
-                 Serial.println(left_motor_out);
-                 Serial.println(right_motor_out);
                  }
                  else{
                  MotorLeft->setSpeed(left_motor_out);
                  MotorLeft->run(BACKWARD); 
                  MotorRight->setSpeed(right_motor_out);
                  MotorRight->run(FORWARD);
-                 Serial.println(left_motor_out);
-                 Serial.println(right_motor_out);
-                 
                  }
-                current_angle = relative_angle(original_angle_compass,compass());
-                e = (target_angle-current_angle);
-                
-                
+                 current_angle = relative_angle(original_angle_compass, current_angle);
+                 e = target_angle-current_angle;
+                 if (e<-180){      //this normalises the angle difference as we have a angle 'clock' that goes -180 to 180
+                      e+=360;
+                 }
+                 if (e>180){
+                      e-=360;
+                 }
          } 
-         delay(5000);
 }
 //stop function
 void stop_robot(){

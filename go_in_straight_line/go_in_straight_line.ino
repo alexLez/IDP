@@ -18,14 +18,20 @@ float angle_to_follow;
 
 void setup() {
          Serial.begin(9600);
+         Serial.println("Start");
          delay(1000);
         
          mag.begin(); //turn the magnometer on
-      
+        int first_reading = compass();
         //read the original magnometer angle here and treat this is 0
-        
-         original_angle_compass = compass();
+        int total_angle_Compass=0  ; //we will take the angle many times and take an average, excluding the first one as this is often wrong
+        for (int i=1; i<=10; i+=1){
+          total_angle_Compass+=compass();
+          delay(100);
+        }
+        original_angle_compass = total_angle_Compass/10;
         //original_angle_compass=compass();
+        Serial.println(first_reading);
         Serial.println("original angle is:");
         Serial.println(original_angle_compass);
     

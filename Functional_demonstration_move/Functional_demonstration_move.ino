@@ -4,15 +4,14 @@
 #include "Magnometer.h"
 // define functions
 
-//set the length in y direction of arena
+//set the length in y and x direction of arena
 float y_length;
+float x_length;
 
 
 //define the original direction and the current direction
 float original_angle_compass;
 float current_angle;
-
-
 //define angle to follow
 float angle_to_follow;
 
@@ -33,6 +32,8 @@ void setup() {
         MotorLeft->run(RELEASE);
         MotorRight->run(RELEASE);
         AFMS.begin();  // create with the default frequency 1.6KHz for motors
+
+        angle_to_follow=0;
 }
 
 
@@ -43,11 +44,16 @@ void setup() {
 
 void loop() {
         //get data
-        
+        int i= 0;
+        while(i<1000){
         current_angle = compass();
         current_angle=relative_angle(original_angle_compass,current_angle);//make it relative to original angle
-   
-        motor_follow_angle(current_angle, 0); 
+        motor_follow_angle(current_angle, angle_to_follow); 
+        i+=1;
+        }
+        stop_robot();
+        turn(current_angle,90);
+        angle_to_follow+=90;
         
      
           
