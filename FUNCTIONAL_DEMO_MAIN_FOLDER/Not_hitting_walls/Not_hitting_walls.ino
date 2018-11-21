@@ -5,8 +5,8 @@
 // define functions
 
 //set the length in y direction of arena
-float y_length;
-
+int y_length;
+int x_length;
 
 //define the original direction and the current direction
 float original_angle_compass;
@@ -21,6 +21,7 @@ void setup() {
          delay(1000);
         
          mag.begin(); //turn the magnometer on
+         Serial.println("Help");
         //set up servo
         ultrasound_turner.attach(ServoPin);   //attach to a pin
         ultrasound_turner.write(0);  //initilise servo to 0
@@ -53,27 +54,17 @@ void setup() {
 void loop() {
         //get data
         int i= 0;
-        while(i<15){
+        while(i<350){
         current_angle = compass();
         current_angle=relative_angle(original_angle_compass,current_angle);//make it relative to original angle
         set_servo();
         xycoordinate();
         
         motor_follow_angle(current_angle, angle_to_follow); 
-        Serial.println(i);
         i+=1;
         }
         
-        stop_robot();
         
-        turn(current_angle,40);
-        stop_robot();
-        angle_to_follow+=40;
-        if ((angle_to_follow)>180){
-          angle_to_follow -= 360;
-        
-        }
-        delay(3000);
         
      
           

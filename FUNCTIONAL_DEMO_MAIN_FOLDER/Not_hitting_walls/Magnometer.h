@@ -10,5 +10,5 @@ float relative_angle(float original_angle, float current_angle); //normalise for
 
 #include <Servo.h>
 Servo ultrasound_turner; 
-const int ServoPin = 12;
+const int ServoPin = 7;
 void set_servo();

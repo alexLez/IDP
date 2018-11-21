@@ -38,11 +38,9 @@ void loop() {
        Serial.println(current_angle);
         if (current_angle<3){
               ultrasound_turner.write(current_angle+180); //turn the servo to face the direction original direction
-              
         }
         else{
               ultrasound_turner.write(current_angle);   //as servo only turns 180 degrees so we will need to reset it when it turns past here to keep perpendicular
-             
         }
        
         

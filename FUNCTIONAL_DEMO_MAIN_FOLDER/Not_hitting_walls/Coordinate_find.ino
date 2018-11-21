@@ -49,7 +49,20 @@ void xycoordinate() {     //coordinate finding function
 }
 
 
-void wall_checker_and_bouncer(){
+void wall_check(){
   int x = coordinate[0];
   int y = coordinate[1];
+  //find the distance to all 4 walls
+  int XLeft=x;    
+  int XRight=x_length-x;
+  int YBottom=y;
+  int YTop=y_length-y;
+  if (XLeft<30 or XRight<30 or YBottom<30 or YTop<30){
+    stop_robot();
+    delay(100);
+    turn(current_angle,90);
+    delay(1000);
+    current_angle = relative_angle(original_angle_compass,compass());
+    angle_to_follow=current_angle;
+  }
 }
