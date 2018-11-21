@@ -47,9 +47,3 @@ void xycoordinate() {     //coordinate finding function
         
        
 }
-
-
-void wall_checker_and_bouncer(){
-  int x = coordinate[0];
-  int y = coordinate[1];
-}

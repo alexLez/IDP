@@ -1,6 +1,6 @@
 
 
-  
+
     
 void motor_follow_angle(float current_angle,float desired_angle){
          Serial.println("current_angle is:");
@@ -8,17 +8,15 @@ void motor_follow_angle(float current_angle,float desired_angle){
          Serial.println("desired angle is:");
          Serial.println(desired_angle);
          int M_average = 100;
-         int k_p_large=5; //for when it is out by more than 5
-         int k_p_small=5;  //for when it is only a small deviation
+         int k_p_large=7; //for when it is out by more than 5
+         int k_p_small=7;  //for when it is only a small deviation
          float e = current_angle-desired_angle; //if this is positive we are veering to the right
          Serial.println("error is");
          Serial.println(e);
-         if (-5 <e and e<5){
-         p_out = k_p_small*e;
-         }
-         else{
+         
+         
          p_out = k_p_large*e;  //set gain
-         }
+         
          int right_motor_out = M_average +p_out;
          int left_motor_out = M_average -p_out;
          if (right_motor_out>255){
@@ -44,17 +42,16 @@ void motor_follow_angle(float current_angle,float desired_angle){
          
 }
 
-
-//turn x degrees
+ //turn x degrees
 void turn(int current_angle, int turn_angle){
-    int direction_turn = turn_angle/abs(turn_angle);  //positive is clockwise and negative is AC 
+    
     float target_angle = current_angle+turn_angle;
     float e =(target_angle-relative_angle(original_angle_compass,compass()));
       
       Serial.print("Error");
       Serial.println(e);
       
-    while ((abs(e))>5)   //while we are over 5 degrees from the angle we want to be at use the proportional control to get there
+    while ((e)>5)   //while we are over 5 degrees from the angle we want to be at use the proportional control to get there
          {      
                  int M_average = 100;
                  int k_p = 5;
@@ -64,11 +61,11 @@ void turn(int current_angle, int turn_angle){
                  int direction_turn = e/abs(e);
                  int left_motor_out = (M_average +p_out);
                  int right_motor_out = (M_average +p_out);
-                 if (right_motor_out>150){
-                    right_motor_out=150;
+                 if (right_motor_out>255){
+                    right_motor_out=255;
                  }
-                 if (left_motor_out>150){
-                    left_motor_out=150;
+                 if (left_motor_out>255){
+                    left_motor_out=255;
          }
                  if (direction_turn==1){
                  MotorLeft->setSpeed(left_motor_out);
@@ -101,8 +98,7 @@ void stop_robot(){
          MotorRight->setSpeed(0);
          MotorRight->run(FORWARD);
 }
-
-void turn_no_compass(int turn_time,int direction_turn){   //driection turn = 1 for right and -1 for left, turn time in secs
+ void turn_no_compass(double turn_time,int direction_turn){   //driection turn = 1 for right and -1 for left, turn time in secs
                  int left_motor_out=255*direction_turn;
                  int right_motor_out=255*direction_turn*(-1);
                  MotorLeft->setSpeed(left_motor_out);
@@ -115,4 +111,3 @@ void turn_no_compass(int turn_time,int direction_turn){   //driection turn = 1 f
                  MotorRight->setSpeed(0);
                  MotorRight->run(FORWARD);
 }
-  

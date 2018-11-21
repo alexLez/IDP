@@ -1,5 +1,3 @@
-
-
 const int trigPinx = 9;
 const int trigPiny = 10;
 const int echoPinx = 11;

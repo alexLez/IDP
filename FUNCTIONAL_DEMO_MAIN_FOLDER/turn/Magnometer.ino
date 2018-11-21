@@ -2,8 +2,7 @@
 
 
 //find angle function
-
-float compass(){
+ float compass(){
   sensors_event_t event;    //set up event
   mag.getEvent(&event);
   float heading=0;
@@ -26,8 +25,7 @@ float compass(){
   float headingDegrees = heading * 180/M_PI;
   return headingDegrees;
 }
-
-float relative_angle(float original_angle, float current_angle){
+ float relative_angle(float original_angle, float current_angle){
   int angle= current_angle-original_angle;
   if ((angle)>180){
     angle = angle-360;
@@ -36,16 +34,4 @@ float relative_angle(float original_angle, float current_angle){
     angle = angle+360;
   }
   return angle;
-}
-
-
-
-void set_servo(){
-  if (current_angle<3){
-             ultrasound_turner.write(current_angle+180); //turn the servo to face the direction original direction
-       }
-  else{
-              ultrasound_turner.write(current_angle);   //as servo only turns 180 degrees so we will need to reset it when it turns past here to keep perpendicular
-        }
-
 }

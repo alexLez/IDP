@@ -3,27 +3,19 @@
 #include "Motor_functions.h"
 #include "Magnometer.h"
 // define functions
-
-//set the length in y direction of arena
+ //set the length in y direction of arena
 float y_length;
-
-
-//define the original direction and the current direction
+ //define the original direction and the current direction
 float original_angle_compass;
 float current_angle;
-
-
-//define angle to follow
+ //define angle to follow
 float angle_to_follow;
-
-void setup() {
+ void setup() {
          Serial.begin(9600);
          delay(1000);
         
          mag.begin(); //turn the magnometer on
-        //set up servo
-        ultrasound_turner.attach(ServoPin);   //attach to a pin
-        ultrasound_turner.write(0);  //initilise servo to 0
+      
         //read the original magnometer angle here and treat this is 0
         
          int first_reading = compass();
@@ -44,44 +36,25 @@ void setup() {
         AFMS.begin();  // create with the default frequency 1.6KHz for motors
         angle_to_follow=0;
 }
-
-
-
-
-
-
-void loop() {
+int i= 0;  
+ void loop() {
         //get data
-        int i= 0;
-        while(i<15){
+        i=0;
+        current_angle=relative_angle(original_angle_compass,compass());
+        angle_to_follow = current_angle;
+        while(i<50){
         current_angle = compass();
         current_angle=relative_angle(original_angle_compass,current_angle);//make it relative to original angle
-        set_servo();
-        xycoordinate();
-        
         motor_follow_angle(current_angle, angle_to_follow); 
-        Serial.println(i);
         i+=1;
         }
         
         stop_robot();
-        
-        turn(current_angle,40);
+        delay(1000);
+        turn_no_compass(2.5,1);
         stop_robot();
-        angle_to_follow+=40;
-        if ((angle_to_follow)>180){
-          angle_to_follow -= 360;
         
-        }
-        delay(3000);
+        delay(1000);
         
      
-          
-        
-        
-          
-        
-        
-        
-  
-}
+ }         
