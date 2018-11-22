@@ -3,16 +3,12 @@
   
     
 void motor_follow_angle(float current_angle,float desired_angle){
-         Serial.println("current_angle is:");
-         Serial.println(current_angle);
-         Serial.println("desired angle is:");
-         Serial.println(desired_angle);
-         int M_average = 100;
+
+         int M_average = 30;
          int k_p_large=7; //for when it is out by more than 5
          int k_p_small=7;  //for when it is only a small deviation
          float e = current_angle-desired_angle; //if this is positive we are veering to the right
-         Serial.println("error is");
-         Serial.println(e);
+
          
          
          p_out = k_p_large*e;  //set gain
@@ -35,8 +31,7 @@ void motor_follow_angle(float current_angle,float desired_angle){
          MotorLeft->run(FORWARD); 
          MotorRight->setSpeed(right_motor_out);
          MotorRight->run(FORWARD); 
-         Serial.println(left_motor_out);
-         Serial.println(right_motor_out);
+         
          
          
          

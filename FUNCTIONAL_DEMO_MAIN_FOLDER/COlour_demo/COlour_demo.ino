@@ -55,7 +55,7 @@ void setup() {
        //fill the colour array with the value of black detected at the start in 0.01 sec time intervals
         for (int i=0;i<10;i+=1){
           rolling_colour[i]=light_levels(Pin1);
-          delay(10);
+          delay(100);
         }
 }
 
@@ -77,7 +77,7 @@ void loop() {
         rolling_colour[9] = light_levels(Pin1);
         rolling_average = array_average(rolling_colour);//this is the rolling average of the first 8 values so we can compare the final 2 values to check if there is a new colour detected-having 2 values will hopefully remove a little bit of noise  
         BlackRef = rolling_average;  // set the reference level for what we think is normal to be the average levels we are seeing and we move along
-        if (((rolling_colour[9]+rolling_colour[8])/2)>rolling_average+50){    //the 50 is just the minimum that may be a mine as it is a significant jump
+        if (((rolling_colour[9]+rolling_colour[8])/2)>rolling_average+3){    //the 50 is just the minimum that may be a mine as it is a significant jump
              MotorLeft->setSpeed(30);   //slow right down and approach slowly
              MotorLeft->run(FORWARD); 
              MotorRight->setSpeed(30);
@@ -86,11 +86,13 @@ void loop() {
              stop_robot();
              delay(100); 
              float light_levels_used=light_levels(Pin1);  //measure the light levels here
-             if (light_levels_used>BlackRef+100 and light_levels_used<BlackRef+200){    //this is only for yellow and red at the moment
+             if (light_levels_used>BlackRef+5 and light_levels_used<BlackRef+100){    //this is only for yellow and red at the moment
               colour = 2 ;   //say it is yellow
+              delay(10000);
              }
-             if (light_levels_used>=BlackRef+200 and light_levels_used>BlackRef+1000){
+             if (light_levels_used>=BlackRef+3 and light_levels_used>BlackRef+6){
               colour = 3;  //say it is red
+              delay(10000);
              }
              else {
               colour=0;
