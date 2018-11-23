@@ -90,7 +90,7 @@ void loop() {
              MotorRight->run(BACKWARD); 
              stop_robot();
              delay(1000);
-             rand_turn_time = random(1.5,3)
+             rand_turn_time = random(1.5,4.5)
              turn_no_compass(rand_turn_time,-1,255);
              current_angle=relative_angle(original_angle_compass,current_angle);
              angle_to_follow=current_angle;
@@ -100,7 +100,9 @@ void loop() {
        }
        colour=0;//reset it to black once manouver has been completed
         Serial.println(analogRead(A0));
-        
+
+      //if near a wall
+      //turn
         }
           
         
