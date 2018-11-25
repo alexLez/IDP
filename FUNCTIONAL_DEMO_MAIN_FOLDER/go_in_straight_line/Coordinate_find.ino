@@ -3,9 +3,9 @@ void xycoordinate() {     //coordinate finding function
         //get the x coordinate
         // defines ultrasound variables
         long xduration;
-        int xdistance;
+        
         long yduration;
-        int ydistance;
+        
         // Clears the trigPin
         digitalWrite(trigPinx, LOW);
         delayMicroseconds(2);
@@ -30,20 +30,25 @@ void xycoordinate() {     //coordinate finding function
         yduration = pulseIn(echoPiny, HIGH);
         // Calculating the distance
         ydistance= yduration*0.034/2;
-        if (setup_or_loop==0){
-          int xcoordinate = xdistance;
-          int ycoordinate = ydistance;
-          zero[0] = xcoordinate;
-          zero[1]=ycoordinate;
-          setup_or_loop+=1;
-        }
-        else{
-        int xcoordinate = xdistance-zero[0];
-        int ycoordinate = ydistance-zero[1];
-        coordinate[0] = xcoordinate ;
-        coordinate[1]=ycoordinate;
+//        if (setup_or_loop==0){
+//          int xcoordinate = xdistance;
+//          int ycoordinate = ydistance;
+//          zero[0] = xcoordinate;
+//          zero[1]=ycoordinate;
+//          setup_or_loop+=1;
+//        }
+//        else{
+//        int xcoordinate = xdistance-zero[0];
+//        int ycoordinate = ydistance-zero[1];
+//        coordinate[0] = xcoordinate ;
+//        coordinate[1]=ycoordinate;
           
-        }
+        //}
         
        
+}
+
+
+void servo_rotater(){
+  
 }

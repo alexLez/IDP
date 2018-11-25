@@ -7,6 +7,7 @@
 
 //set the length in y direction of arena
 float y_length;
+float x_length;
 
 int LED_YELLOW=44;
 int LED_RED=46;
@@ -64,6 +65,8 @@ void setup() {
         turn_no_compass(initial_turn_time,1,255);
         current_angle=relative_angle(original_angle_compass,compass());
         angle_to_follow=current_angle;
+
+        //set up average for the distances from the walls
         
 }
 
@@ -99,6 +102,7 @@ void loop() {
              MotorLeft->run(BACKWARD); 
              MotorRight->setSpeed(50);
              MotorRight->run(BACKWARD); 
+             delay(2000);
              stop_robot();
              delay(1000);
              rand_turn_time = random(1.5,4.5);
@@ -110,10 +114,21 @@ void loop() {
         
        }
        colour=0;//reset it to black once manouver has been completed
-        Serial.println(analogRead(A0));
-
-      //if near a wall
-      //turn
+        
+      //get current coordinates
+      xycoordinate();
+      rolling_average_distancex[9]=xdistance;
+      rolling_average_distancey[9]=ydistance;
+      if ((((rolling_average_distancex[8]+rolling_average_distancex[9])/2)<40) or (((rolling_average_distancex[8]+rolling_average_distancex[9])/2)>x_length-40) or (((rolling_average_distancex[8]+rolling_average_distancex[9])/2)<40) or (((rolling_average_distancey[9]+rolling_average_distancey[8])/2)>y_length-40)){
+        stop_robot();
+        rand_turn_time = random(1.5,4.5);
+        turn_no_compass(rand_turn_time,-1,255);
+        stop_robot();
+        current_angle=relative_angle(original_angle_compass,current_angle);
+        angle_to_follow=current_angle;
+      }
+      
+      
         }
           
         
