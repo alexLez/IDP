@@ -55,6 +55,12 @@ void xydistance() {     //coordinate finding function
 void servo_ultrasound(){
   ultrasound_turner.write(servo_angle);
   xydistance();
+  if (servo_angle >=180){
+    forward_sweep = false;
+  }
+  if (servo_angle <= 0){
+    forward_sweep = true;
+  }
   if (forward_sweep){
     servo_angle+=5 ;
   }
