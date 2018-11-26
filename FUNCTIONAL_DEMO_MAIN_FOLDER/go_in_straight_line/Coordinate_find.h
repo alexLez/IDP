@@ -16,5 +16,5 @@ float rolling_average_distancey[10]={0,0,0,0,0,0,0,0,0,0};
 #include <Servo.h>
 Servo ultrasound_turner; 
 const int ServoPin = 12;
-int servo_angle;
-void servo_ultrasound(servo_angle);
+int servo_angle=0;
+void servo_ultrasound();

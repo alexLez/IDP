@@ -55,7 +55,7 @@ void xydistance() {     //coordinate finding function
 void servo_ultrasound(){
   ultrasound_turner.write(servo_angle);
   xydistance();
-  if (xdistance or ydistance) < 20 and (xdistance or ydistance) > 10 {
+  if ((xdistance or ydistance) < 20 and (xdistance or ydistance) > 10) {
     count ++;
   }
   if (servo_angle >=180){

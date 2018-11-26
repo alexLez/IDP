@@ -13,7 +13,7 @@ float compass(){
   if (wall){
     heading = 0;
     wall = false;
-    break
+    break;
   }
   delay(20);
   }
