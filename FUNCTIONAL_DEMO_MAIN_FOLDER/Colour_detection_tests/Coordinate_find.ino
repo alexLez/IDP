@@ -1,5 +1,5 @@
 
-void xydistance() {     //coordinate finding function
+void xycoordinate() {     //coordinate finding function
         //get the x coordinate
         // defines ultrasound variables
         long xduration;
@@ -49,17 +49,6 @@ void xydistance() {     //coordinate finding function
 }
 
 
-
-
-
-void servo_ultrasound(){
-  ultrasound_turner.write(servo_angle);
-  xydistance();
-  if (forward_sweep){
-    servo_angle+=5 ;
-  }
-  else{
-    servo_angle-=5;     
-  }
-
+void servo_rotater(){
+  
 }

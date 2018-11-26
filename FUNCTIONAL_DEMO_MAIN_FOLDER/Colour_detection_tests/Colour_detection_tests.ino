@@ -18,7 +18,7 @@ float current_angle;
 
 int colour=0;
 int Pin1=A0;
-int Pin2 = A1;
+int Pin2=A1;
 int Pin3=A2;
 float BlackRef1;
 float BlackRef2;
@@ -35,8 +35,6 @@ float instantaneous_reading_average3;
 //define angle to follow
 float angle_to_follow;
 int rand_turn_time;
-int servo_angle = 0;
-bool forward_sweep = true
 
 void setup() {
          Serial.begin(9600);
@@ -52,7 +50,6 @@ void setup() {
           total_angle_Compass+=compass();
           delay(100);
         }
-        
         original_angle_compass = total_angle_Compass/10;
 
         //LED pin set up
@@ -60,7 +57,6 @@ void setup() {
         pinMode(LED_YELLOW, OUTPUT);
         
         //set up motors
-        
         MotorLeft->run(RELEASE);
         MotorRight->run(RELEASE);
         AFMS.begin();  // create with the default frequency 1.6KHz for motor
@@ -71,11 +67,7 @@ void setup() {
         angle_to_follow=current_angle;
 
         //set up average for the distances from the walls
-        for (int a=1;a<10;a++){
-          xydistance();
-          rolling_average_distancex[a]=xdistance;
-          rolling_average_distancey[a]=ydistance;
-        }
+        
         
 }
 
@@ -91,40 +83,11 @@ void loop() {
         //get the current angle and make it relative to the original angle on a -180 to 180 scale
         current_angle=relative_angle(original_angle_compass,compass());
         motor_follow_angle(current_angle, angle_to_follow); 
-        find_current_colour_and_show();
-        Serial.println("aaaa");
-        if (colour=0){
-           // servo angle+=5;
-            //pass and keep going as we are
-        }
-
-       else if (colour=2){   //yellow
-              //we are currently stationary somove forward for a couple of secs
-              MotorLeft->setSpeed(30);   
-             MotorLeft->run(FORWARD); 
-             MotorRight->setSpeed(30);
-             MotorRight->run(FORWARD);
-             delay(2000);
-             stop_robot(); //leave the angle to follow the same as it is for now
-       }
-       else if (colour=3){
-               //we are currently stationary so reverse for a couple of secs then move off
-              MotorLeft->setSpeed(50);   
-             MotorLeft->run(BACKWARD); 
-             MotorRight->setSpeed(50);
-             MotorRight->run(BACKWARD); 
-             delay(2000);
-             stop_robot();
-             delay(1000);
-             rand_turn_time = random(1.5,4.5);
-             turn_no_compass(rand_turn_time,-1,255);
-             current_angle=relative_angle(original_angle_compass,current_angle);
-             angle_to_follow=current_angle;
-             motor_follow_angle(current_angle,angle_to_follow);
-             //now move on and use other checks
         
-       }
-       colour=0;//reset it to black once manouver has been completed  
+        
+        
+        find_current_colour_and_show(10,20,70);   //vary the thresholds here
+        
       
       
       
