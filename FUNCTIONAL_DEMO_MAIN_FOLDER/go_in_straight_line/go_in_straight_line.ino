@@ -72,12 +72,7 @@ void setup() {
         current_angle=relative_angle(original_angle_compass,compass());
         angle_to_follow=current_angle;
 
-        //set up average for the distances from the walls
-        for (int a=1;a<10;a++){
-          xydistance();
-          rolling_average_distancex[a]=xdistance;
-          rolling_average_distancey[a]=ydistance;
-        }
+        
         
 }
 
@@ -110,7 +105,7 @@ void loop() {
              stop_robot(); //leave the angle to follow the same as it is for now
       
        }
-       else if (colour==3){
+       else if (colour==3){//red
                //we are currently stationary so reverse for a couple of secs then move off
               MotorLeft->setSpeed(50);   
              MotorLeft->run(BACKWARD); 
@@ -119,12 +114,13 @@ void loop() {
              delay(2000);
              stop_robot();
              delay(1000);
-             rand_turn_time = random(1.5,4.5);
-             turn_no_compass(rand_turn_time,-1,255);
+             find_coordinate();
+             decide_where_to_turn_and_turn();
              current_angle=relative_angle(original_angle_compass,current_angle);
              angle_to_follow=current_angle;
              motor_follow_angle(current_angle,angle_to_follow);
              //now move on and use other checks
+             find_coordinate();
         
        }
        colour=0;//reset it to black once manouver has been completed  

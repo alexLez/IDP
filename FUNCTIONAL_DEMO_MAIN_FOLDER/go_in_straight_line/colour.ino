@@ -9,7 +9,7 @@ int light_levels(int pin,int LDR){    //return an integer representing the colou
     light_intensity_levels_sum+= analogRead(Pin1);
     delay(10);
     if (i%2==0){
-      servo_ultrasound();
+      servo_ultrasound();   //every even check we will run the code to rotate the servo and take a distance reading
       if (wall){
         wall = false;
         if (LDR==1){

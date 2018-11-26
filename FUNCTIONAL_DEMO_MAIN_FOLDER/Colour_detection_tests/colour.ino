@@ -45,8 +45,10 @@ void find_current_colour_and_show(int stop_thresh, int red_thresh,int yellow_thr
          
         BlackRef1 = rolling_average1;  // set the reference level for what we think is normal to be the average levels we are seeing and we move along
        
-        Serial.println("Rolling_average1");
+        Serial.println("Rolling_average");
         Serial.println(rolling_average1);
+        Serial.println("Value");
+        Serial.println(rolling_colour1[9]);
         instantaneous_reading_average1 = ((rolling_colour1[9]+rolling_colour1[8])/2);
         
         if ((instantaneous_reading_average1>rolling_average1+stop_thresh)){  //if the sensor readings for any of the LDRs jumps up, slow down and approach
@@ -54,17 +56,18 @@ void find_current_colour_and_show(int stop_thresh, int red_thresh,int yellow_thr
              MotorLeft->run(FORWARD); 
              MotorRight->setSpeed(10);
              MotorRight->run(FORWARD);
-             delay(1000); //delay one second until we are closer in and will hopefully be able to see the full mine
+             delay(100); //delay one second until we are closer in and will hopefully be able to see the full mine
              stop_robot();
-             delay(1000); 
+             delay(100); 
              float light_levels_used1=light_levels(Pin1);  //measure the light levels here for sensor 1
              if ((light_levels_used1>BlackRef1+yellow_thresh)){    //if any of them are yellow we say it is yellow
               colour = 2 ;
               Serial.println("Yellow");//say it is yellow
               Serial.println(analogRead(A0));//print colour value for testing
               digitalWrite(44,HIGH);//flash LED
-              delay(10000);
+              delay(100);
               digitalWrite(44,LOW);
+              rolling_average_reset();
              }
              else if ((light_levels_used1>BlackRef1+red_thresh)){   //red if any of them are red
               colour = 3;  //say it is red
@@ -72,8 +75,9 @@ void find_current_colour_and_show(int stop_thresh, int red_thresh,int yellow_thr
               Serial.println("Red");   //say its red
               Serial.println(analogRead(A0)); //print colour value for testing
               digitalWrite(46,HIGH);  //flash LED
-              delay(10000);
+              delay(100);
               digitalWrite(46,LOW);
+              rolling_average_reset();
               
              }
         }

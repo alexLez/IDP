@@ -3,7 +3,7 @@
 
 
 void motor_follow_angle(float current_angle,float desired_angle);
-void turn(int current_angle, int turn_angle);
+void turn_to_zero();
 void stop_robot();
 void turn_no_compass(int turn_time,int direction_turn,int turn_speed);
 void reverse();

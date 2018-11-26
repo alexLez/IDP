@@ -30,21 +30,7 @@ void xydistance() {     //coordinate finding function
         yduration = pulseIn(echoPiny, HIGH);
         // Calculating the distance
         ydistance= yduration*0.034/2;
-//        if (setup_or_loop==0){
-//          int xcoordinate = xdistance;
-//          int ycoordinate = ydistance;
-//          zero[0] = xcoordinate;
-//          zero[1]=ycoordinate;
-//          setup_or_loop+=1;
-//        }
-//        else{
-//        int xcoordinate = xdistance-zero[0];
-//        int ycoordinate = ydistance-zero[1];
-//        coordinate[0] = xcoordinate ;
-//        coordinate[1]=ycoordinate;
-          
-        //}
-        
+
        
 }
 
@@ -85,4 +71,22 @@ void servo_ultrasound(){
     servo_angle-=5;     
   }
 
+}
+
+void find_coordinate(){
+  turn_to_zero();
+  ultrasound_turner.write(0); //turn to 0 and make the ultrasound turners perpendicular
+  xydistance();
+  int xcoordinate = x_length-xdistance;
+  int ycoordinate = y_length-ydistance;
+  
+  //reset the sweeping action
+  count = 0 ;  
+  forward_sweep = true;
+  servo_angle=0;
+  
+  Serial.print(xcoordinate);
+  Serial.print(", ");
+  Serial.print(ycoordinate);
+  
 }
