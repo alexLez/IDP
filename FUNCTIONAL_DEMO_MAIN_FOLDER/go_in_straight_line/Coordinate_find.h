@@ -17,4 +17,4 @@ float rolling_average_distancey[10]={0,0,0,0,0,0,0,0,0,0};
 Servo ultrasound_turner; 
 const int ServoPin = 12;
 int servo_angle;
-bool servo_direction= true;  //true = clockwise
+void servo_ultrasound(servo_angle);

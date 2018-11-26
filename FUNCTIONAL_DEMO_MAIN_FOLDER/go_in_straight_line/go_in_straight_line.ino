@@ -36,7 +36,9 @@ float instantaneous_reading_average3;
 float angle_to_follow;
 int rand_turn_time;
 int servo_angle = 0;
-bool forward_sweep = true
+bool forward_sweep = true;
+int count = 0;
+bool wall = false;
 
 void setup() {
          Serial.begin(9600);
@@ -92,7 +94,7 @@ void loop() {
         current_angle=relative_angle(original_angle_compass,compass());
         motor_follow_angle(current_angle, angle_to_follow); 
         find_current_colour_and_show();
-        Serial.println("aaaa");
+        //Serial.println("aaaa");
         if (colour=0){
            // servo angle+=5;
             //pass and keep going as we are
@@ -106,6 +108,7 @@ void loop() {
              MotorRight->run(FORWARD);
              delay(2000);
              stop_robot(); //leave the angle to follow the same as it is for now
+      
        }
        else if (colour=3){
                //we are currently stationary so reverse for a couple of secs then move off

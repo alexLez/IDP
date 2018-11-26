@@ -31,9 +31,20 @@ void motor_follow_angle(float current_angle,float desired_angle){
          MotorLeft->run(FORWARD); 
          MotorRight->setSpeed(right_motor_out);
          MotorRight->run(FORWARD); 
+
+        
          
          
          
+}
+
+void reverse(){
+         MotorLeft->setSpeed(30);
+         MotorLeft->run(BACKWARD); 
+         MotorRight->setSpeed(30);
+         MotorRight->run(BACKWARD); 
+         delay(2000);
+         stop_robot();
          
 }
 

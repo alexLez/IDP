@@ -7,9 +7,15 @@ float compass(){
   sensors_event_t event;    //set up event
   mag.getEvent(&event);
   float heading=0;
-  for (int i=1;i<20;i+=1){
-  heading += atan2(event.magnetic.y, event.magnetic.x);    //get x and y magnetic fields
-  delay(10);
+  for (int i=1;i<10;i+=1){
+  heading += atan2(event.magnetic.y, event.magnetic.x);//get x and y magnetic fields
+  servo_ultrasound();
+  if (wall){
+    heading = 0;
+    wall = false;
+    break
+  }
+  delay(20);
   }
   heading = heading/19;
   float declinationAngle = 0;

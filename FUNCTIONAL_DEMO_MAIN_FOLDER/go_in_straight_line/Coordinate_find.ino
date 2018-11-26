@@ -55,11 +55,28 @@ void xydistance() {     //coordinate finding function
 void servo_ultrasound(){
   ultrasound_turner.write(servo_angle);
   xydistance();
+  if (xdistance or ydistance) < 20 and (xdistance or ydistance) > 10 {
+    count ++;
+  }
   if (servo_angle >=180){
     forward_sweep = false;
+    if (count >= 3){
+      reverse();
+      rand_turn_time = random(1.5,4.5);
+      turn_no_compass(rand_turn_time,-1,255);
+      wall = true;
+    }
+    count = 0;
   }
   if (servo_angle <= 0){
     forward_sweep = true;
+    if (count >= 3){
+      reverse();
+      rand_turn_time = random(1.5,4.5);
+      turn_no_compass(rand_turn_time,-1,255);
+      wall = true;
+    }
+    count = 0;
   }
   if (forward_sweep){
     servo_angle+=5 ;
