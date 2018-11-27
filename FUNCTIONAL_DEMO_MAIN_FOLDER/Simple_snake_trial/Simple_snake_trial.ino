@@ -104,28 +104,36 @@ void loop() {
             stop_robot();
             delay(1000);
             current_angle=relative_angle(original_angle_compass,compass());
+            delay(1000);
             motor_follow_angle(current_angle,90);
             delay(2000);
+            stop_robot();
+            delay(1000);
             turn(90);
-            Serial.print(original_angle_compass);
-            Serial.print(relative_angle(original_angle_compass,compass()));
-            delay(5000);
+            delay(2000);
             current_angle=relative_angle(original_angle_compass,compass());
             angle_to_follow=180;
             motor_follow_angle(current_angle,angle_to_follow);
+            direction_facing=-1; //set it so we are now going in the other direction to the original direction
             
           }
           else{
            
             turn(-90);
+            stop_robot();
+            delay(1000);
             current_angle=relative_angle(original_angle_compass,compass());
+            delay(1000);
             motor_follow_angle(current_angle,90);
             delay(2000);
+            stop_robot();
+            delay(1000);
             turn(-90);
+            delay(2000);
             current_angle=relative_angle(original_angle_compass,compass());
             angle_to_follow=0;
             motor_follow_angle(current_angle,angle_to_follow);
-            
+            direction_facing = 1;  //set it so we are going in original direction again
           
           }
           

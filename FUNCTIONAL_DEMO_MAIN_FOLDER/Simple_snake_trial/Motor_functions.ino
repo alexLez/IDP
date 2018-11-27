@@ -7,7 +7,14 @@ void motor_follow_angle(float current_angle,float desired_angle){
          int M_average = 100;
          int k_p_large=7; //for when it is out by more than 5
          int k_p_small=7;  //for when it is only a small deviation
-         float e = current_angle-desired_angle; //if this is positive we are veering to the right
+         
+        float e = current_angle-desired_angle; //if this is positive we are veering to the right
+        if (e>180){    //coreect for when we are at different sides of the compass
+          e = e-360;
+        }
+        if (e<-180){
+          e=e+360;
+        }
          Serial.println("error");
          Serial.println(e);
          
@@ -126,6 +133,12 @@ void turn(int turn_angle){
     current_angle=relative_angle(original_angle_compass,compass());
     float target_angle = current_angle+turn_angle;
     float e =(target_angle-relative_angle(original_angle_compass,compass()));
+    if (e>180){    //correct for when we are at different sides of the compass
+      e = e-360;
+    }
+    if (e<-180){
+      e=e+360;
+    }
       
       Serial.print("Error");
       Serial.println(e);
