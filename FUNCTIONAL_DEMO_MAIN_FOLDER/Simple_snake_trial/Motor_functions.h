@@ -2,7 +2,7 @@
 #include <Adafruit_MotorShield.h>
 
 
-void motor_follow_angle(float current_angle,float desired_angle);
+void motor_follow_angle(float current_angle,float desired_angle,int average_speed);
 void turn_to_zero();
 void turn(int turn_angle);
 void stop_robot();

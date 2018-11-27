@@ -92,28 +92,30 @@ void loop() {
         current_angle=relative_angle(original_angle_compass,compass());
         Serial.println("current_angle");
         Serial.println(current_angle);
-        motor_follow_angle(current_angle, angle_to_follow); 
-        //find_current_colour_and_show();
+        motor_follow_angle(current_angle, angle_to_follow,100); 
+        //find_current_colour_and_show(10,20,70);
         xydistance();
         Serial.println("ydistance");
         Serial.println(y_length-ydistance);
         if ((y_length-ydistance)<=30){
           stop_robot();
           if (direction_facing==1){
+            reverse();//reverse for a couple of secs to leave any collected mines outside then stop and turn
             turn(90);
             stop_robot();
             delay(1000);
+            for (int i=1;i<=10;i++){
             current_angle=relative_angle(original_angle_compass,compass());
-            delay(1000);
-            motor_follow_angle(current_angle,90);
-            delay(2000);
+            motor_follow_angle(current_angle,90,30);
+            delay(20);
+            }
             stop_robot();
             delay(1000);
             turn(90);
             delay(2000);
             current_angle=relative_angle(original_angle_compass,compass());
             angle_to_follow=180;
-            motor_follow_angle(current_angle,angle_to_follow);
+            motor_follow_angle(current_angle,angle_to_follow,100);
             
             direction_facing=-1; //set it so we are now going in the other direction to the original direction
             
@@ -123,17 +125,18 @@ void loop() {
             turn(-90);
             stop_robot();
             delay(1000);
+            for (int i=1;i<=10;i++){
             current_angle=relative_angle(original_angle_compass,compass());
-            delay(1000);
-            motor_follow_angle(current_angle,90);
-            delay(2000);
+            motor_follow_angle(current_angle,90,30);
+            delay(20);
+            }
             stop_robot();
             delay(1000);
             turn(-90);
             delay(2000);
             current_angle=relative_angle(original_angle_compass,compass());
             angle_to_follow=0;
-            motor_follow_angle(current_angle,angle_to_follow);
+            motor_follow_angle(current_angle,angle_to_follow,100);
             direction_facing = 1;  //set it so we are going in original direction again
           
           }
@@ -163,41 +166,45 @@ void loop() {
              if (direction_facing==1){
              turn(-45);
              stop_robot();
-             current_angle=relative_angle(original_angle_compass,compass());
-             delay(1000);
-             motor_follow_angle(current_angle,-45);
-             delay(3000);
+             for (int i=1;i<=15;i++){
+            current_angle=relative_angle(original_angle_compass,compass());
+            motor_follow_angle(current_angle,-45,100);
+            delay(20);
+            }
              stop_robot();
              delay(1000);
              turn(90);
              stop_robot();
-             current_angle=relative_angle(original_angle_compass,compass());
-             delay(1000);
-             motor_follow_angle(current_angle,45);
-             delay(3000);
+             for (int i=1;i<=15;i++){
+            current_angle=relative_angle(original_angle_compass,compass());
+            motor_follow_angle(current_angle,45,100);
+            delay(20);
+            }
              turn(-45);
              current_angle=relative_angle(original_angle_compass,compass());
-             motor_follow_angle(current_angle,0);
+             motor_follow_angle(current_angle,0,100);
              angle_to_follow=0;
              }
              else {
                   turn(45);
                  stop_robot();
-                 current_angle=relative_angle(original_angle_compass,compass());
-                 delay(1000);
-                 motor_follow_angle(current_angle,-135);
-                 delay(3000);
+                 for (int i=1;i<=15;i++){
+                current_angle=relative_angle(original_angle_compass,compass());
+                motor_follow_angle(current_angle,-135,100);
+                delay(20);
+                }
                  stop_robot();
                  delay(1000);
                  turn(-90);
                  stop_robot();
+                 for (int i=1;i<=15;i++){
                  current_angle=relative_angle(original_angle_compass,compass());
-                 delay(1000);
-                 motor_follow_angle(current_angle,135);
-                 delay(3000);
+                 motor_follow_angle(current_angle,135,100);
+                 delay(20);
+                 }
                  turn(45);
                  current_angle=relative_angle(original_angle_compass,compass());
-                 motor_follow_angle(current_angle,180);
+                 motor_follow_angle(current_angle,180,100);
                  angle_to_follow=180;
              }
              

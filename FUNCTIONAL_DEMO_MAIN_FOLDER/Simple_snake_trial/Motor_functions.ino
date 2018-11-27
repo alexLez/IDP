@@ -2,9 +2,9 @@
 
   
     
-void motor_follow_angle(float current_angle,float desired_angle){
+void motor_follow_angle(float current_angle,float desired_angle, int average_speed){
 
-         int M_average = 100;
+         int M_average = average_speed;
          int k_p_large=7; //for when it is out by more than 5
          int k_p_small=7;  //for when it is only a small deviation
          
@@ -35,10 +35,12 @@ void motor_follow_angle(float current_angle,float desired_angle){
          if (left_motor_out<0){
             left_motor_out=0;
          }
+         MotorRight->run(FORWARD);
+         MotorLeft->run(FORWARD);
          MotorLeft->setSpeed(left_motor_out);
-         MotorLeft->run(FORWARD); 
+          
          MotorRight->setSpeed(right_motor_out);
-         MotorRight->run(FORWARD); 
+          
 
         
          
@@ -47,9 +49,9 @@ void motor_follow_angle(float current_angle,float desired_angle){
 }
 
 void reverse(){
-         MotorLeft->setSpeed(30);
+         MotorLeft->setSpeed(100);
          MotorLeft->run(BACKWARD); 
-         MotorRight->setSpeed(30);
+         MotorRight->setSpeed(100);
          MotorRight->run(BACKWARD); 
          delay(2000);
          stop_robot();
@@ -83,51 +85,7 @@ void turn_no_compass(int turn_time,int direction_turn,int turn_speed){   //driec
 }
 
 
- //turn back to 0
-void turn_to_zero(){
-    float e =-relative_angle(original_angle_compass,compass());
-      
-     Serial.print("Error");
-     Serial.println(e);
-      
-    while (abs((e)>2))   //while we are over 2 degrees from the angle we want to be at use the proportional control to get there
-         {      
-                 int M_average = 100;
-                 int k_p = 5;
-                 
-                 Serial.println(e); 
-                 int p_out = e*k_p;
-                 int direction_turn = e/abs(e);
-                 int left_motor_out = (M_average +p_out);
-                 int right_motor_out = (M_average +p_out);
-                 if (right_motor_out>255){
-                    right_motor_out=255;
-                 }
-                 if (left_motor_out>255){
-                    left_motor_out=255;
-         }
-                 if (direction_turn==1){
-                 MotorLeft->setSpeed(left_motor_out);
-                 MotorLeft->run(FORWARD); 
-                 MotorRight->setSpeed(right_motor_out);
-                 MotorRight->run(BACKWARD);
-                 Serial.println(left_motor_out);
-                 Serial.println(right_motor_out);
-                 }
-                 else{
-                 MotorLeft->setSpeed(left_motor_out);
-                 MotorLeft->run(BACKWARD); 
-                 MotorRight->setSpeed(right_motor_out);
-                 MotorRight->run(FORWARD);
-                 Serial.println(left_motor_out);
-                 Serial.println(right_motor_out);
-                 
-                 }
-                e =-relative_angle(original_angle_compass,compass());
-                
-                
-         } 
-}
+
 
 void turn(int turn_angle){
     current_angle=relative_angle(original_angle_compass,compass());

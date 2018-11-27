@@ -41,7 +41,7 @@ void rolling_average_reset(){
   }
 }
 
-void find_current_colour_and_show(){
+void find_current_colour_and_show(int something,int red, int yellow){
   //find the current colour
         for (int i=0;i<9;i+=1){    //all the avlues in array down by one - the most recent level is put at the end
           rolling_colour1[i]=rolling_colour1[i+1];
@@ -62,7 +62,7 @@ void find_current_colour_and_show(){
         instantaneous_reading_average1 = ((rolling_colour1[9]+rolling_colour1[8])/2);
         instantaneous_reading_average2 = ((rolling_colour2[9]+rolling_colour2[8])/2);
         instantaneous_reading_average3 = ((rolling_colour3[9]+rolling_colour3[8])/2);
-        if ((instantaneous_reading_average1>rolling_average1+10) or (instantaneous_reading_average2>rolling_average2+10) or (instantaneous_reading_average3>rolling_average3+10)  ){  //if the sensor readings for any of the LDRs jumps up, slow down and approach
+        if ((instantaneous_reading_average1>rolling_average1+something) or (instantaneous_reading_average2>rolling_average2+something) or (instantaneous_reading_average3>rolling_average3+something)){//if there is anything detected, slow down and check it  ){  //if the sensor readings for any of the LDRs jumps up, slow down and approach
              MotorLeft->setSpeed(10);   //slow right down and approach slowly
              MotorLeft->run(FORWARD); 
              MotorRight->setSpeed(10);
@@ -73,7 +73,7 @@ void find_current_colour_and_show(){
              float light_levels_used1=light_levels(Pin1,1);  //measure the light levels here for sensor 1
              float light_levels_used2=light_levels(Pin2,2);  //measure the light levels here for sensor 2
              float light_levels_used3=light_levels(Pin3,3);  //measure the light levels here for sensor 3
-             if ((light_levels_used1>BlackRef1+70)or (light_levels_used2>BlackRef2+70) or (light_levels_used3>BlackRef3+70)){    //if any of them are yellow we say it is yellow
+             if ((light_levels_used1>BlackRef1+yellow)or (light_levels_used2>BlackRef2+yellow) or (light_levels_used3>BlackRef3+yellow)){    //if any of them are yellow we say it is yellow
               colour = 2 ;
               Serial.println("Yellow");//say it is yellow
               Serial.println(analogRead(A0));//print colour value for testing
@@ -81,7 +81,7 @@ void find_current_colour_and_show(){
               delay(3000);
               digitalWrite(44,LOW);
              }
-             else if ((light_levels_used2>BlackRef2+20) or (light_levels_used1>BlackRef1+20) or (light_levels_used3>BlackRef3+20)){   //red if any of them are red
+             else if ((light_levels_used2>BlackRef2+red) or (light_levels_used1>BlackRef1+red) or (light_levels_used3>BlackRef3+red)){   //red if any of them are red
               colour = 3;  //say it is red
               
               Serial.println("Red");   //say its red
