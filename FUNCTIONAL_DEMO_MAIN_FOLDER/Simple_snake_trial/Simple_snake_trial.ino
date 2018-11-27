@@ -114,6 +114,7 @@ void loop() {
             current_angle=relative_angle(original_angle_compass,compass());
             angle_to_follow=180;
             motor_follow_angle(current_angle,angle_to_follow);
+            
             direction_facing=-1; //set it so we are now going in the other direction to the original direction
             
           }
@@ -161,28 +162,46 @@ void loop() {
              //go around the red mine to the left where we know it is safe if we are going up, and to the right if we are going down
              if (direction_facing==1){
              turn(-45);
+             stop_robot();
+             current_angle=relative_angle(original_angle_compass,compass());
+             delay(1000);
              motor_follow_angle(current_angle,-45);
              delay(3000);
+             stop_robot();
+             delay(1000);
              turn(90);
+             stop_robot();
+             current_angle=relative_angle(original_angle_compass,compass());
+             delay(1000);
              motor_follow_angle(current_angle,45);
              delay(3000);
              turn(-45);
+             current_angle=relative_angle(original_angle_compass,compass());
              motor_follow_angle(current_angle,0);
+             angle_to_follow=0;
              }
              else {
                   turn(45);
-                  motor_follow_angle(current_angle,45);
-                  delay(3000);
+                 stop_robot();
+                 current_angle=relative_angle(original_angle_compass,compass());
+                 delay(1000);
+                 motor_follow_angle(current_angle,-135);
+                 delay(3000);
+                 stop_robot();
+                 delay(1000);
                  turn(-90);
-                 motor_follow_angle(current_angle,-45);
+                 stop_robot();
+                 current_angle=relative_angle(original_angle_compass,compass());
+                 delay(1000);
+                 motor_follow_angle(current_angle,135);
                  delay(3000);
                  turn(45);
-                 motor_follow_angle(current_angle,0);
+                 current_angle=relative_angle(original_angle_compass,compass());
+                 motor_follow_angle(current_angle,180);
+                 angle_to_follow=180;
              }
              
-             current_angle=relative_angle(original_angle_compass,current_angle);
-             angle_to_follow=current_angle;
-             motor_follow_angle(current_angle,angle_to_follow);
+           
              //now move on and use other checks
              find_coordinate();
         
