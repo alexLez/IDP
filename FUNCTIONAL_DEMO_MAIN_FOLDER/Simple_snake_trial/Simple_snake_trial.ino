@@ -6,8 +6,8 @@
 // define functions
 
 //set the length in y direction of arena
-float y_length=212;
-float x_length=212;
+float y_length=200;
+float x_length=200;
 
 int LED_YELLOW=44;
 int LED_RED=46;
@@ -36,30 +36,30 @@ float instantaneous_reading_average3;
 float angle_to_follow;
 int rand_turn_time;
 
-bool forward_sweep = true;
-int count = 0;
-bool wall = false;
+
 
 void setup() {
          Serial.begin(9600);
-         
-         ultrasound_turner.attach(8);
+         Serial.print("start");
+          
          //magnometer set up   
          mag.begin(); //turn the magnometer on
+
          pinMode(trigPinx, OUTPUT); // Sets the trigPin as an Output
           pinMode(echoPinx, INPUT); // Sets the echoPin as an Input
           pinMode(trigPiny, OUTPUT); // Sets the trigPin as an Output
           pinMode(echoPiny, INPUT); // Sets the echoPin as an Input
          
+         
         //read the original magnometer angle here and treat this as 0
         int total_angle_Compass=0  ; //we will take the angle many times and take an average, excluding the first one as this is often wrong
-        for (int i=1; i<=2; i+=1){
+        for (int i=1; i<=10; i+=1){
           total_angle_Compass+=compass();
           delay(50);
         }
         
         original_angle_compass = total_angle_Compass/10;
-        Serial.println("finished magnet");
+
         //LED pin set up
         pinMode(LED_RED, OUTPUT);
         pinMode(LED_YELLOW, OUTPUT);
@@ -70,13 +70,13 @@ void setup() {
         MotorRight->run(RELEASE);
         AFMS.begin();  // create with the default frequency 1.6KHz for motor
         rolling_average_reset();
-        int initial_turn_time = 1.5;
-        turn_no_compass(initial_turn_time,1,255);
+        
+        
         current_angle=relative_angle(original_angle_compass,compass());
         angle_to_follow=current_angle;
-
-        
-        
+        Serial.println("start");
+        colour=0;
+        direction_facing=1;
 }
 
 
@@ -90,27 +90,58 @@ void loop() {
 
         //get the current angle and make it relative to the original angle on a -180 to 180 scale
         current_angle=relative_angle(original_angle_compass,compass());
+        Serial.println("current_angle");
+        Serial.println(current_angle);
         motor_follow_angle(current_angle, angle_to_follow); 
-        find_current_colour_and_show();
-        Serial.println("aaaa");
+        //find_current_colour_and_show();
+        xydistance();
+        Serial.println("ydistance");
+        Serial.println(y_length-ydistance);
+        if ((y_length-ydistance)<=30){
+          stop_robot();
+          if (direction_facing==1){
+            turn(90);
+            stop_robot();
+            delay(1000);
+            current_angle=relative_angle(original_angle_compass,compass());
+            motor_follow_angle(current_angle,90);
+            delay(2000);
+            turn(90);
+            Serial.print(original_angle_compass);
+            Serial.print(relative_angle(original_angle_compass,compass()));
+            delay(5000);
+            current_angle=relative_angle(original_angle_compass,compass());
+            angle_to_follow=180;
+            motor_follow_angle(current_angle,angle_to_follow);
+            
+          }
+          else{
+           
+            turn(-90);
+            current_angle=relative_angle(original_angle_compass,compass());
+            motor_follow_angle(current_angle,90);
+            delay(2000);
+            turn(-90);
+            current_angle=relative_angle(original_angle_compass,compass());
+            angle_to_follow=0;
+            motor_follow_angle(current_angle,angle_to_follow);
+            
+          
+          }
+          
+        }
+        
         if (colour==0){
            // servo angle+=5;
             //pass and keep going as we are
         }
 
        else if (colour==2){   //yellow
-              //we are currently stationary somove forward for a couple of secs
-              MotorLeft->setSpeed(30);   
-             MotorLeft->run(FORWARD); 
-             MotorRight->setSpeed(30);
-             MotorRight->run(FORWARD);
-             delay(2000);
-             stop_robot(); //leave the angle to follow the same as it is for now
-      
+              //essentially pass and just keep moving forward
        }
        else if (colour==3){//red
                //we are currently stationary so reverse for a couple of secs then move off
-              MotorLeft->setSpeed(50);   
+             MotorLeft->setSpeed(50);   
              MotorLeft->run(BACKWARD); 
              MotorRight->setSpeed(50);
              MotorRight->run(BACKWARD); 
@@ -118,7 +149,29 @@ void loop() {
              stop_robot();
              delay(1000);
              find_coordinate();
-             decide_where_to_turn_and_turn();
+             
+             //go around the red mine to the left where we know it is safe if we are going up, and to the right if we are going down
+             if (direction_facing==1){
+             turn(-45);
+             motor_follow_angle(current_angle,-45);
+             delay(3000);
+             turn(90);
+             motor_follow_angle(current_angle,45);
+             delay(3000);
+             turn(-45);
+             motor_follow_angle(current_angle,0);
+             }
+             else {
+                  turn(45);
+                  motor_follow_angle(current_angle,45);
+                  delay(3000);
+                 turn(-90);
+                 motor_follow_angle(current_angle,-45);
+                 delay(3000);
+                 turn(45);
+                 motor_follow_angle(current_angle,0);
+             }
+             
              current_angle=relative_angle(original_angle_compass,current_angle);
              angle_to_follow=current_angle;
              motor_follow_angle(current_angle,angle_to_follow);
@@ -127,7 +180,7 @@ void loop() {
         
        }
        colour=0;//reset it to black once manouver has been completed  
-      
+       
       
       
         }

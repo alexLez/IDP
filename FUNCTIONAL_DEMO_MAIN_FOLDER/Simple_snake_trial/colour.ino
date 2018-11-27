@@ -6,24 +6,10 @@ int light_levels(int pin,int LDR){    //return an integer representing the colou
   //create a running total so we can find an average and remove anomalies
   int light_intensity_levels_sum=0;
   for (int i=0;i<=9;i++){
-    light_intensity_levels_sum+= analogRead(Pin1);
+    light_intensity_levels_sum+= analogRead(pin);
     delay(10);
-    if (i%2==0){
-      servo_ultrasound();   //every even check we will run the code to rotate the servo and take a distance reading
-      if (wall){
-        wall = false;
-        if (LDR==1){
-        return rolling_colour1[8];
-        }
-        else if (LDR==2){
-        return rolling_colour2[8];
-        }
-        else if (LDR==3){
-        return rolling_colour3[8];
-        }
-      }
-    }
-  }
+   }
+  
   int average =light_intensity_levels_sum/10    ;         
 
 

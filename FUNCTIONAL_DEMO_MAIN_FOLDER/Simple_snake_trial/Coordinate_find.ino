@@ -38,55 +38,23 @@ void xydistance() {     //coordinate finding function
 
 
 
-void servo_ultrasound(){
-  ultrasound_turner.write(servo_angle);
-  xydistance();
-  Serial.println(ydistance);
-  Serial.println(xdistance);
-  if ((xdistance or ydistance) < 30 and (xdistance or ydistance) > 10) {
-    count ++;
-  }
-  if (servo_angle >=180){
-    forward_sweep = false;
-    if (count >= 3){
-      reverse();
-      decide_where_to_turn_and_turn();
-      wall = true;
-    }
-    count = 0;
-  }
-  if (servo_angle <= 0){
-    forward_sweep = true;
-    if (count >= 3){
-      reverse();
-      decide_where_to_turn_and_turn();
-      wall = true;
-    }
-    count = 0;
-  }
-  if (forward_sweep){
-    servo_angle+=5 ;
-  }
-  else{
-    servo_angle-=5;     
-  }
 
-}
 
 void find_coordinate(){
-  turn_to_zero();
-  ultrasound_turner.write(0); //turn to 0 and make the ultrasound turners perpendicular
-  xydistance();
-  int xcoordinate = x_length-xdistance;
-  int ycoordinate = y_length-ydistance;
   
-  //reset the sweeping action
-  count = 0 ;  
-  forward_sweep = true;
-  servo_angle=0;
+  xydistance();
+  if (direction_facing == 1){
+        xcoordinate = x_length-xdistance;
+        ycoordinate = y_length-ydistance;
+  }
+  else{
+        xcoordinate = xdistance;
+        ycoordinate = ydistance;
+  } 
+  
   
   Serial.print(xcoordinate);
-  Serial.print(",aaaa ");
+  Serial.print(", ");
   Serial.print(ycoordinate);
   
 }
